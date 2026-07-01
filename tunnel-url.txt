@@ -1,0 +1,72 @@
+CLOUDFLARE QUICK TUNNEL URL - ASHA BEAUTY SALON
+=================================================
+
+Current Tunnel URL: [PASTE YOUR CLOUDFLARE TUNNEL URL HERE]
+
+QUICK SETUP (FREE - NO ACCOUNT NEEDED):
+======================================
+
+1. Install Cloudflare Tunnel (cloudflared):
+   - Download from: https://github.com/cloudflare/cloudflared/releases/latest
+   - Extract and add to PATH, or use: choco install cloudflared
+
+2. Start the Flask App FIRST:
+   - Open a new command prompt
+   - Navigate to: d:\asha
+   - Run: python app.py
+   - Keep this window open (Flask must be running)
+
+3. Start the Quick Tunnel:
+   - Double-click: start-cloudflare-tunnel.bat
+   - The tunnel will automatically create a temporary public URL
+   - Keep this window open (tunnel must be running)
+
+4. Copy the URL:
+   - Look for the URL in the command output (starts with https://)
+   - Paste it above for future reference
+   - Share this URL to access your site from any network
+
+5. Access your site:
+   - Use the URL provided in the command output
+   - Example: https://random-name.trycloudflare.com
+
+TROUBLESHOOTING:
+================
+If the site doesn't open when you share the URL:
+
+1. Make sure BOTH windows are open:
+   - Flask app window (python app.py)
+   - Cloudflare tunnel window (start-cloudflare-tunnel.bat)
+
+2. Check if Flask is running:
+   - Open browser and go to: http://localhost:5000
+   - If this doesn't work, Flask is not running properly
+
+3. Check tunnel status:
+   - Look for "Your quick Tunnel has been created" message
+   - If you see errors, restart the tunnel
+
+4. Try alternative - ngrok (easier):
+   - Download from: https://ngrok.com/download
+   - Extract and run: ngrok http 5000
+   - Copy the https URL from ngrok window
+
+5. Firewall issues:
+   - Make sure Windows Firewall allows Python
+   - Temporarily disable firewall to test
+
+NOTES:
+======
+- Quick tunnels are FREE and don't require a Cloudflare account
+- The URL changes each time you restart the tunnel
+- The tunnel will be active as long as the batch file is running
+- Make sure your Flask app (python app.py) is running FIRST
+- Keep this file updated with your current tunnel URL
+- Both Flask app AND tunnel must be running simultaneously
+
+ADVANCED SETUP (PERMANENT URL):
+================================
+If you want a permanent URL with a custom domain:
+1. Create a free Cloudflare account at cloudflare.com
+2. Follow the instructions in cloudflare-tunnel.yml
+3. This requires authentication and configuration
