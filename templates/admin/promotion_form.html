@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - {{ site_settings.site_name if site_settings else 'ASHA Beauty Salon' }}{% endblock %}
+
+{% block content %}
+<section class="section booking-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>{{ title }}</h2>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-3 mb-4">
+                <div class="admin-sidebar">
+                    <h4 style="margin-bottom: 1.5rem; color: var(--text-dark);">Admin Menu</h4>
+                    <nav class="nav flex-column">
+                        <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_appointments') }}">
+                            <i class="fas fa-calendar-check me-2"></i>Appointments
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_services') }}">
+                            <i class="fas fa-cut me-2"></i>Services
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_gallery') }}">
+                            <i class="fas fa-images me-2"></i>Gallery
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_stylists') }}">
+                            <i class="fas fa-users me-2"></i>Stylists
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_testimonials') }}">
+                            <i class="fas fa-star me-2"></i>Testimonials
+                        </a>
+                        <a class="nav-link" href="{{ url_for('edit_about') }}">
+                            <i class="fas fa-info-circle me-2"></i>About Section
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_before_after') }}">
+                            <i class="fas fa-exchange-alt me-2"></i>Before/After
+                        </a>
+                        <a class="nav-link active" href="{{ url_for('admin_promotions') }}">
+                            <i class="fas fa-percentage me-2"></i>Promotions
+                        </a>
+                        <a class="nav-link" href="{{ url_for('edit_site_settings') }}">
+                            <i class="fas fa-cog me-2"></i>Site Settings
+                        </a>
+                        <a class="nav-link" href="{{ url_for('home') }}">
+                            <i class="fas fa-home me-2"></i>Back to Website
+                        </a>
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </nav>
+                </div>
+            </div>
+            
+            <div class="col-lg-9">
+                <div class="booking-form">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.title.label }}</label>
+                            {{ form.title(class="form-control") }}
+                            {% if form.title.errors %}
+                            <div class="text-danger">
+                                {% for error in form.title.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.description.label }}</label>
+                            {{ form.description(class="form-control", rows="4") }}
+                            {% if form.description.errors %}
+                            <div class="text-danger">
+                                {% for error in form.description.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Promotion Image (Choose one option)</label>
+                            <div class="mb-3">
+                                <label class="form-label">Upload Image</label>
+                                {{ form.image_file(class="form-control") }}
+                                {% if form.image_file.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.image_file.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Or Paste Image URL</label>
+                                {{ form.image_url(class="form-control", placeholder="https://example.com/promotion.jpg") }}
+                                {% if form.image_url.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.image_url.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.discount_percentage.label }}</label>
+                            {{ form.discount_percentage(class="form-control", placeholder="e.g., 20 for 20% off") }}
+                            {% if form.discount_percentage.errors %}
+                            <div class="text-danger">
+                                {% for error in form.discount_percentage.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.valid_from.label }}</label>
+                                {{ form.valid_from(class="form-control") }}
+                                {% if form.valid_from.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.valid_from.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.valid_until.label }}</label>
+                                {{ form.valid_until(class="form-control") }}
+                                {% if form.valid_until.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.valid_until.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                {{ form.is_active(class="form-check-input") }}
+                                <label class="form-check-label">{{ form.is_active.label }}</label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-gold w-100">Save Promotion</button>
+                        <a href="{{ url_for('admin_promotions') }}" class="btn btn-outline-gold w-100 mt-2">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

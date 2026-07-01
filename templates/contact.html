@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - ASHA Beauty Salon{% endblock %}
+
+{% block content %}
+<section class="section booking-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Contact Us</h2>
+            <p>Get in touch with us for appointments and inquiries</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <h4>Phone</h4>
+                        <p>{{ site_settings.phone if site_settings else '+91 98765 43210' }}</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <h4>Email</h4>
+                        <p>{{ site_settings.email if site_settings else 'info@ashabeautysalon.com' }}</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h4>Address</h4>
+                        <p>{{ site_settings.address if site_settings else '123 Beauty Street, Fashion District' }}</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <h4>Opening Hours</h4>
+                        <p>{{ site_settings.business_hours if site_settings else 'Mon-Sat: 9AM - 8PM' }}<br>Sunday: Closed</p>
+                    </div>
+                </div>
+                
+                <div class="contact-item mt-4" style="text-align: left;">
+                    <h4 style="margin-bottom: 1rem;">WhatsApp Us</h4>
+                    {% if site_settings and site_settings.whatsapp_number %}
+                    <a href="https://wa.me/{{ site_settings.whatsapp_number }}" class="btn btn-gold" style="display: inline-flex; align-items: center; gap: 10px;">
+                        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                    </a>
+                    {% else %}
+                    <a href="https://wa.me/919876543210" class="btn btn-gold" style="display: inline-flex; align-items: center; gap: 10px;">
+                        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-lg-8">
+                <div class="contact-form">
+                    <h3 style="text-align: center; margin-bottom: 2rem; color: var(--text-dark);">Send Us a Message</h3>
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.name.label }}</label>
+                                {{ form.name(class="form-control") }}
+                                {% if form.name.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.name.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.email.label }}</label>
+                                {{ form.email(class="form-control") }}
+                                {% if form.email.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.email.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.phone.label }}</label>
+                            {{ form.phone(class="form-control") }}
+                            {% if form.phone.errors %}
+                            <div class="text-danger">
+                                {% for error in form.phone.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.subject.label }}</label>
+                            {{ form.subject(class="form-control") }}
+                            {% if form.subject.errors %}
+                            <div class="text-danger">
+                                {% for error in form.subject.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.message.label }}</label>
+                            {{ form.message(class="form-control", rows="5") }}
+                            {% if form.message.errors %}
+                            <div class="text-danger">
+                                {% for error in form.message.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-gold w-100">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-12">
+                <div style="border-radius: 20px; overflow: hidden; box-shadow: var(--shadow);">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.0!2d77.2!3d28.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjjCsDM2JzAwLjAiTiA3N8KwMTInMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890"
+                        width="100%" 
+                        height="400" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

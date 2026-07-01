@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - {{ site_settings.site_name if site_settings else 'ASHA Beauty Salon' }}{% endblock %}
+
+{% block content %}
+<section class="section booking-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>{{ title }}</h2>
+        </div>
+        
+        <div class="booking-form">
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    <label class="form-label">{{ form.name.label }}</label>
+                    {{ form.name(class="form-control") }}
+                    {% if form.name.errors %}
+                    <div class="text-danger">
+                        {% for error in form.name.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.specialization.label }}</label>
+                    {{ form.specialization(class="form-control") }}
+                    {% if form.specialization.errors %}
+                    <div class="text-danger">
+                        {% for error in form.specialization.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.experience.label }}</label>
+                    {{ form.experience(class="form-control") }}
+                    {% if form.experience.errors %}
+                    <div class="text-danger">
+                        {% for error in form.experience.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.image_url.label }}</label>
+                    {{ form.image_url(class="form-control", placeholder="Enter image URL") }}
+                    {% if form.image_url.errors %}
+                    <div class="text-danger">
+                        {% for error in form.image_url.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.image_file.label }}</label>
+                    {{ form.image_file(class="form-control") }}
+                    {% if form.image_file.errors %}
+                    <div class="text-danger">
+                        {% for error in form.image_file.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <small class="text-muted">Or upload an image from your device</small>
+                </div>
+                {% if stylist and stylist.image %}
+                <div class="mb-3">
+                    <label class="form-label">Current Image</label>
+                    <div>
+                        <img src="{{ stylist.image }}" alt="Current stylist image" style="max-width: 200px; max-height: 200px; object-fit: cover; border-radius: 10px;">
+                    </div>
+                </div>
+                {% endif %}
+                <div class="mb-3">
+                    <label class="form-label">{{ form.bio.label }}</label>
+                    {{ form.bio(class="form-control", rows="4") }}
+                    {% if form.bio.errors %}
+                    <div class="text-danger">
+                        {% for error in form.bio.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-gold w-100">Save Stylist</button>
+                <a href="{{ url_for('admin_stylists') }}" class="btn btn-outline-gold w-100 mt-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

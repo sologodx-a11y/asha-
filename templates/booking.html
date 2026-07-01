@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Book Appointment - ASHA Beauty Salon{% endblock %}
+
+{% block content %}
+<section class="section booking-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Book Your Appointment</h2>
+            <p>Schedule your visit with our expert stylists</p>
+        </div>
+        
+        <div class="booking-form">
+            <h2>Appointment Booking</h2>
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">{{ form.name.label }}</label>
+                        {{ form.name(class="form-control", placeholder="Enter your full name") }}
+                        {% if form.name.errors %}
+                        <div class="text-danger">
+                            {% for error in form.name.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">{{ form.phone.label }}</label>
+                        {{ form.phone(class="form-control", placeholder="Enter your phone number") }}
+                        {% if form.phone.errors %}
+                        <div class="text-danger">
+                            {% for error in form.phone.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.email.label }}</label>
+                    {{ form.email(class="form-control", placeholder="Enter your email (optional)") }}
+                    {% if form.email.errors %}
+                    <div class="text-danger">
+                        {% for error in form.email.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.service_id.label }}</label>
+                    {{ form.service_id(class="form-select") }}
+                    {% if form.service_id.errors %}
+                    <div class="text-danger">
+                        {% for error in form.service_id.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.stylist_id.label }}</label>
+                    {{ form.stylist_id(class="form-select") }}
+                    {% if form.stylist_id.errors %}
+                    <div class="text-danger">
+                        {% for error in form.stylist_id.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">{{ form.date.label }}</label>
+                        {{ form.date(class="form-control") }}
+                        {% if form.date.errors %}
+                        <div class="text-danger">
+                            {% for error in form.date.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">{{ form.time.label }}</label>
+                        {{ form.time(class="form-select") }}
+                        {% if form.time.errors %}
+                        <div class="text-danger">
+                            {% for error in form.time.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.notes.label }}</label>
+                    {{ form.notes(class="form-control", rows="4", placeholder="Any special requests or notes (optional)") }}
+                    {% if form.notes.errors %}
+                    <div class="text-danger">
+                        {% for error in form.notes.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-gold w-100">Book Appointment</button>
+            </form>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-md-4 mb-4">
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <h4>Call Us</h4>
+                    <p>{{ site_settings.phone if site_settings else '+91 98765 43210' }}</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="contact-item">
+                    <i class="fab fa-whatsapp"></i>
+                    <h4>WhatsApp</h4>
+                    <p>{{ site_settings.phone if site_settings else '+91 98765 43210' }}</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <h4>Email</h4>
+                    <p>{{ site_settings.email if site_settings else 'info@ashabeautysalon.com' }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

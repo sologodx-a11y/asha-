@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Special Offers - {{ site_settings.site_name if site_settings else 'ASHA Beauty Salon' }}{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="section-title scroll-animate">
+            <h1>Special Offers</h1>
+            <p>Exclusive deals and promotions for our valued customers</p>
+        </div>
+        
+        {% if promotions %}
+        <div class="row">
+            {% for promotion in promotions %}
+            <div class="col-lg-6 mb-4 scroll-animate-scale">
+                <div class="promotion-card">
+                    <div class="promotion-card-image">
+                        {% if promotion.image_url %}
+                        <img src="{{ promotion.image_url }}" alt="{{ promotion.title }}">
+                        {% endif %}
+                        {% if promotion.discount_percentage %}
+                        <div class="promotion-discount-badge">{{ promotion.discount_percentage }}% OFF</div>
+                        {% endif %}
+                    </div>
+                    <div class="promotion-card-body">
+                        <h3>{{ promotion.title }}</h3>
+                        <p>{{ promotion.description }}</p>
+                        <div class="promotion-card-footer">
+                            {% if promotion.valid_from and promotion.valid_until %}
+                            <span class="validity">
+                                <i class="far fa-calendar-alt"></i>
+                                Valid: {{ promotion.valid_from }} to {{ promotion.valid_until }}
+                            </span>
+                            {% endif %}
+                            <a href="{{ url_for('booking') }}" class="btn btn-gold">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center">
+            <div class="no-offers scroll-animate">
+                <i class="fas fa-tags fa-4x mb-4"></i>
+                <h3>No Active Offers</h3>
+                <p>Check back soon for exciting promotions and special deals!</p>
+                <a href="{{ url_for('services') }}" class="btn btn-gold mt-3">View Our Services</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - {{ site_settings.site_name if site_settings else 'ASHA Beauty Salon' }}{% endblock %}
+
+{% block content %}
+<section class="section booking-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Admin Dashboard</h2>
+            <p>Manage your salon operations</p>
+        </div>
+        
+        <div class="admin-stats">
+            <div class="stat-card">
+                <h3>{{ total_appointments }}</h3>
+                <p>Total Appointments</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ pending_appointments }}</h3>
+                <p>Pending Appointments</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ total_services }}</h3>
+                <p>Total Services</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ total_gallery }}</h3>
+                <p>Gallery Items</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-3 mb-4">
+                <div class="admin-sidebar">
+                    <h4 style="margin-bottom: 1.5rem; color: var(--text-dark);">Admin Menu</h4>
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="{{ url_for('admin_dashboard') }}">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_appointments') }}">
+                            <i class="fas fa-calendar-check me-2"></i>Appointments
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_services') }}">
+                            <i class="fas fa-cut me-2"></i>Services
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_gallery') }}">
+                            <i class="fas fa-images me-2"></i>Gallery
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_stylists') }}">
+                            <i class="fas fa-users me-2"></i>Stylists
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_testimonials') }}">
+                            <i class="fas fa-star me-2"></i>Testimonials
+                        </a>
+                        <a class="nav-link" href="{{ url_for('edit_about') }}">
+                            <i class="fas fa-info-circle me-2"></i>About Section
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_before_after') }}">
+                            <i class="fas fa-exchange-alt me-2"></i>Before/After
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_promotions') }}">
+                            <i class="fas fa-percentage me-2"></i>Promotions
+                        </a>
+                        <a class="nav-link" href="{{ url_for('edit_site_settings') }}">
+                            <i class="fas fa-cog me-2"></i>Site Settings
+                        </a>
+                        <a class="nav-link" href="{{ url_for('home') }}">
+                            <i class="fas fa-home me-2"></i>Back to Website
+                        </a>
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </nav>
+                </div>
+            </div>
+            
+            <div class="col-lg-9">
+                <div class="admin-content">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--text-dark);">Recent Appointments</h3>
+                    {% if recent_appointments %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Service</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for appointment in recent_appointments %}
+                                <tr>
+                                    <td>{{ appointment.name }}</td>
+                                    <td>{{ appointment.phone }}</td>
+                                    <td>{{ appointment.service.name if appointment.service else 'N/A' }}</td>
+                                    <td>{{ appointment.date.strftime('%Y-%m-%d') if appointment.date else 'N/A' }}</td>
+                                    <td>{{ appointment.time }}</td>
+                                    <td>
+                                        <span class="badge badge-{{ appointment.status }}">{{ appointment.status|capitalize }}</span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('update_appointment_status', appointment_id=appointment.id, status='confirmed') }}" class="btn btn-sm btn-success">Confirm</a>
+                                        <a href="{{ url_for('update_appointment_status', appointment_id=appointment.id, status='cancelled') }}" class="btn btn-sm btn-danger">Cancel</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No recent appointments found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

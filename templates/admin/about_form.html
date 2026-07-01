@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - {{ site_settings.site_name if site_settings else 'ASHA Beauty Salon' }}{% endblock %}
+
+{% block content %}
+<section class="section booking-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>{{ title }}</h2>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-3 mb-4">
+                <div class="admin-sidebar">
+                    <h4 style="margin-bottom: 1.5rem; color: var(--text-dark);">Admin Menu</h4>
+                    <nav class="nav flex-column">
+                        <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_appointments') }}">
+                            <i class="fas fa-calendar-check me-2"></i>Appointments
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_services') }}">
+                            <i class="fas fa-cut me-2"></i>Services
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_gallery') }}">
+                            <i class="fas fa-images me-2"></i>Gallery
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_stylists') }}">
+                            <i class="fas fa-users me-2"></i>Stylists
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_testimonials') }}">
+                            <i class="fas fa-star me-2"></i>Testimonials
+                        </a>
+                        <a class="nav-link active" href="{{ url_for('edit_about') }}">
+                            <i class="fas fa-info-circle me-2"></i>About Section
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_before_after') }}">
+                            <i class="fas fa-exchange-alt me-2"></i>Before/After
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_promotions') }}">
+                            <i class="fas fa-percentage me-2"></i>Promotions
+                        </a>
+                        <a class="nav-link" href="{{ url_for('edit_site_settings') }}">
+                            <i class="fas fa-cog me-2"></i>Site Settings
+                        </a>
+                        <a class="nav-link" href="{{ url_for('home') }}">
+                            <i class="fas fa-home me-2"></i>Back to Website
+                        </a>
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </nav>
+                </div>
+            </div>
+            
+            <div class="col-lg-9">
+                <div class="booking-form">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.title.label }}</label>
+                            {{ form.title(class="form-control") }}
+                            {% if form.title.errors %}
+                            <div class="text-danger">
+                                {% for error in form.title.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.description.label }}</label>
+                            {{ form.description(class="form-control", rows="6") }}
+                            {% if form.description.errors %}
+                            <div class="text-danger">
+                                {% for error in form.description.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.use_video.label }}</label>
+                            <div class="form-check form-switch">
+                                {{ form.use_video(class="form-check-input", id="useVideoSwitch", data_use_video="true" if about and about.use_video else "false") }}
+                                <label class="form-check-label" for="useVideoSwitch">Use Video Instead of Image</label>
+                            </div>
+                            <div class="alert alert-info" style="background: #3D3D3D; border-color: var(--gold); margin-top: 10px;">
+                                <small>Enable this to use a looping video instead of a static image in the about section.</small>
+                            </div>
+                        </div>
+                        <div class="mb-3" id="imageSection">
+                            <label class="form-label">Add Image (Choose one option)</label>
+                            <div class="alert alert-info" style="background: #3D3D3D; border-color: var(--gold);">
+                                <small>You can either upload an image file or paste an image URL.</small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Upload Image File</label>
+                                {{ form.image_file(class="form-control") }}
+                                {% if form.image_file.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.image_file.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Or Paste Image URL</label>
+                                {{ form.image_url(class="form-control", placeholder="https://example.com/image.jpg") }}
+                                {% if form.image_url.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.image_url.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mb-3" id="videoSection" style="display: none;">
+                            <label class="form-label">Add Video (Choose one option)</label>
+                            <div class="alert alert-info" style="background: #3D3D3D; border-color: var(--gold);">
+                                <small>You can either upload a video file or paste a video URL. Video will loop automatically.</small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Upload Video File</label>
+                                {{ form.video_file(class="form-control") }}
+                                {% if form.video_file.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.video_file.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Or Paste Video URL</label>
+                                {{ form.video_url(class="form-control", placeholder="https://example.com/video.mp4") }}
+                                {% if form.video_url.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.video_url.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">{{ form.years_experience.label }}</label>
+                                {{ form.years_experience(class="form-control") }}
+                                {% if form.years_experience.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.years_experience.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">{{ form.happy_clients.label }}</label>
+                                {{ form.happy_clients(class="form-control") }}
+                                {% if form.happy_clients.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.happy_clients.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">{{ form.expert_stylists.label }}</label>
+                                {{ form.expert_stylists(class="form-control") }}
+                                {% if form.expert_stylists.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.expert_stylists.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-gold w-100">Save Changes</button>
+                        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-gold w-100 mt-2">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.getElementById('useVideoSwitch').addEventListener('change', function() {
+    const imageSection = document.getElementById('imageSection');
+    const videoSection = document.getElementById('videoSection');
+    
+    if (this.checked) {
+        imageSection.style.display = 'none';
+        videoSection.style.display = 'block';
+    } else {
+        imageSection.style.display = 'block';
+        videoSection.style.display = 'none';
+    }
+});
+
+// Set initial state based on data attribute
+const useVideoSwitch = document.getElementById('useVideoSwitch');
+if (useVideoSwitch.getAttribute('data-use-video') === 'true') {
+    useVideoSwitch.checked = true;
+    document.getElementById('imageSection').style.display = 'none';
+    document.getElementById('videoSection').style.display = 'block';
+}
+</script>
+{% endblock %}

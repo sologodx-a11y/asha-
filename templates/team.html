@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Our Team - ASHA Beauty Salon{% endblock %}
+
+{% block content %}
+<section class="section booking-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Meet Our Expert Team</h2>
+            <p>Talented professionals dedicated to making you look beautiful</p>
+        </div>
+        
+        <div class="row">
+            {% for stylist in stylists %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="team-card">
+                    <img src="{{ stylist.image }}" alt="{{ stylist.name }}">
+                    <div class="team-card-body">
+                        <h3>{{ stylist.name }}</h3>
+                        <p class="specialization">{{ stylist.specialization }}</p>
+                        <p class="experience">{{ stylist.experience }} Experience</p>
+                        {% if stylist.bio %}
+                        <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 1rem;">{{ stylist.bio }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

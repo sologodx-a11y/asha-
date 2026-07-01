@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - {{ site_settings.site_name if site_settings else 'ASHA Beauty Salon' }}{% endblock %}
+
+{% block content %}
+<section class="section booking-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>{{ title }}</h2>
+        </div>
+        
+        <div class="booking-form">
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    <label class="form-label">{{ form.customer_name.label }}</label>
+                    {{ form.customer_name(class="form-control") }}
+                    {% if form.customer_name.errors %}
+                    <div class="text-danger">
+                        {% for error in form.customer_name.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Add Customer Image (Choose one option)</label>
+                    <div class="alert alert-info" style="background: #3D3D3D; border-color: var(--gold);">
+                        <small>You can either upload an image file or paste an image URL.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Upload Customer Image File</label>
+                        {{ form.customer_image_file(class="form-control") }}
+                        {% if form.customer_image_file.errors %}
+                        <div class="text-danger">
+                            {% for error in form.customer_image_file.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Or Paste Customer Image URL</label>
+                        {{ form.customer_image_url(class="form-control", placeholder="https://example.com/image.jpg") }}
+                        {% if form.customer_image_url.errors %}
+                        <div class="text-danger">
+                            {% for error in form.customer_image_url.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.review.label }}</label>
+                    {{ form.review(class="form-control", rows="4") }}
+                    {% if form.review.errors %}
+                    <div class="text-danger">
+                        {% for error in form.review.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.rating.label }}</label>
+                    {{ form.rating(class="form-control", min="1", max="5") }}
+                    {% if form.rating.errors %}
+                    <div class="text-danger">
+                        {% for error in form.rating.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-gold w-100">Save Testimonial</button>
+                <a href="{{ url_for('admin_testimonials') }}" class="btn btn-outline-gold w-100 mt-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

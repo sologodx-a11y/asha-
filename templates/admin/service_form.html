@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - {{ site_settings.site_name if site_settings else 'ASHA Beauty Salon' }}{% endblock %}
+
+{% block content %}
+<section class="section booking-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>{{ title }}</h2>
+        </div>
+        
+        <div class="booking-form">
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    <label class="form-label">{{ form.name.label }}</label>
+                    {{ form.name(class="form-control") }}
+                    {% if form.name.errors %}
+                    <div class="text-danger">
+                        {% for error in form.name.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.description.label }}</label>
+                    {{ form.description(class="form-control", rows="4") }}
+                    {% if form.description.errors %}
+                    <div class="text-danger">
+                        {% for error in form.description.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">{{ form.price.label }} (INR)</label>
+                        {{ form.price(class="form-control", step="0.01", placeholder="Enter price in INR") }}
+                        {% if form.price.errors %}
+                        <div class="text-danger">
+                            {% for error in form.price.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">{{ form.duration.label }}</label>
+                        {{ form.duration(class="form-control") }}
+                        {% if form.duration.errors %}
+                        <div class="text-danger">
+                            {% for error in form.duration.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Add Image (Choose one option)</label>
+                    <div class="alert alert-info" style="background: #3D3D3D; border-color: var(--gold);">
+                        <small>You can either upload an image file or paste an image URL.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Upload Image File</label>
+                        {{ form.image_file(class="form-control") }}
+                        {% if form.image_file.errors %}
+                        <div class="text-danger">
+                            {% for error in form.image_file.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Or Paste Image URL</label>
+                        {{ form.image_url(class="form-control", placeholder="https://example.com/image.jpg") }}
+                        {% if form.image_url.errors %}
+                        <div class="text-danger">
+                            {% for error in form.image_url.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.category.label }}</label>
+                    {{ form.category(class="form-select") }}
+                    {% if form.category.errors %}
+                    <div class="text-danger">
+                        {% for error in form.category.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <div class="form-check">
+                        {{ form.featured(class="form-check-input") }}
+                        <label class="form-check-label">{{ form.featured.label }}</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-gold w-100">Save Service</button>
+                <a href="{{ url_for('admin_services') }}" class="btn btn-outline-gold w-100 mt-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

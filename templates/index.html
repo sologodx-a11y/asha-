@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+
+{% block title %}ASHA Beauty Salon - Beautiful Hair Starts Here{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Beautiful Hair Starts Here</h1>
+        <p>Professional Haircuts, Styling and Hair Care</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('booking') }}" class="btn btn-gold">Book Appointment</a>
+            <a href="{{ url_for('services') }}" class="btn btn-outline-gold">View Services</a>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Services Section -->
+<section class="section">
+    <div class="container">
+        <div class="section-title scroll-animate">
+            <h2>Premium Hair Services</h2>
+            <p>Experience our signature haircuts, treatments, and styling</p>
+        </div>
+        <div class="row">
+            {% for service in featured_services %}
+            <div class="col-lg-4 col-md-6 mb-4 scroll-animate-scale">
+                <div class="service-card">
+                    <img src="{{ service.image }}" alt="{{ service.name }}">
+                    <div class="service-card-body">
+                        <h3>{{ service.name }}</h3>
+                        <p>{{ service.description }}</p>
+                        <div class="service-price">
+                            <span class="price">₹{{ service.price }}</span>
+                            <span class="duration">{{ service.duration }}</span>
+                        </div>
+                        <a href="{{ url_for('booking') }}" class="btn btn-gold w-100">Book Now</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Section -->
+<section class="section" style="background: linear-gradient(135deg, #2C2C2C 0%, #3D3D3D 100%);">
+    <div class="container">
+        <div class="section-title scroll-animate">
+            <h2>Popular Hairstyles Gallery</h2>
+            <p>Get inspired by our stunning hair transformations</p>
+        </div>
+        <div class="gallery-grid">
+            {% for item in gallery_images %}
+            <div class="gallery-item scroll-animate-scale">
+                <img src="{{ item.image }}" alt="{{ item.title }}">
+                <div class="gallery-overlay">
+                    <h4>{{ item.title }}</h4>
+                    <p>{{ item.category|capitalize }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4 scroll-animate">
+            <a href="{{ url_for('gallery') }}" class="btn btn-gold">View Full Gallery</a>
+        </div>
+    </div>
+</section>
+
+<!-- Before/After Transformations Section -->
+{% if before_after_images %}
+<section class="section">
+    <div class="container">
+        <div class="section-title scroll-animate">
+            <h2>Before & After Transformations</h2>
+            <p>See the magic of our expert stylists</p>
+        </div>
+        <div class="row">
+            {% for ba in before_after_images %}
+            <div class="col-md-6 mb-4 scroll-animate-scale">
+                <div class="before-after-card">
+                    <h4>{{ ba.title }}</h4>
+                    <div class="before-after-compare">
+                        <div class="before-image">
+                            <img src="{{ ba.before_image }}" alt="Before">
+                            <span class="label">Before</span>
+                        </div>
+                        <div class="after-image">
+                            <img src="{{ ba.after_image }}" alt="After">
+                            <span class="label">After</span>
+                        </div>
+                    </div>
+                    {% if ba.description %}
+                    <p class="mt-3">{{ ba.description }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- About Section -->
+<section class="section about-section">
+    <div class="container">
+        <div class="about-content">
+            <div class="about-image scroll-animate-left">
+                {% if about and about.use_video and about.video_url %}
+                <video autoplay loop muted playsinline class="about-video">
+                    <source src="{{ about.video_url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                {% else %}
+                <img src="{{ about.image if about else 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800' }}" alt="ASHA Beauty Salon Interior">
+                {% endif %}
+            </div>
+            <div class="about-text scroll-animate-right">
+                <h2>{{ about.title if about else 'About ASHA Beauty Salon' }}</h2>
+                {% if about %}
+                <p>{{ about.description }}</p>
+                {% else %}
+                <p>ASHA Beauty Salon has been a beacon of elegance and style in the beauty industry for over 15 years. Our journey began with a simple vision: to create a space where every client feels like royalty and leaves feeling more beautiful than when they arrived.</p>
+                <p>Our team of expert stylists combines traditional techniques with modern trends to deliver exceptional results. We believe that beautiful hair is not just about the cut or color, but about understanding each client's unique personality and lifestyle.</p>
+                <p>At ASHA, we use only premium products and state-of-the-art equipment to ensure the highest quality services. From classic cuts to avant-garde styling, we are committed to exceeding your expectations.</p>
+                {% endif %}
+                <div class="stats-grid">
+                    <div class="stat-item scroll-animate-scale">
+                        <h3>{{ about.years_experience if about else 15 }}+</h3>
+                        <p>Years Experience</p>
+                    </div>
+                    <div class="stat-item scroll-animate-scale">
+                        <h3>{{ about.happy_clients if about else 5000 }}+</h3>
+                        <p>Happy Clients</p>
+                    </div>
+                    <div class="stat-item scroll-animate-scale">
+                        <h3>{{ about.expert_stylists if about else 12 }}</h3>
+                        <p>Expert Stylists</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="section">
+    <div class="container">
+        <div class="section-title scroll-animate">
+            <h2>Meet Our Stylists</h2>
+            <p>Our talented team of hair professionals</p>
+        </div>
+        <div class="row">
+            {% for stylist in stylists %}
+            <div class="col-lg-3 col-md-6 mb-4 scroll-animate-scale">
+                <div class="team-card">
+                    <img src="{{ stylist.image }}" alt="{{ stylist.name }}">
+                    <div class="team-card-body">
+                        <h3>{{ stylist.name }}</h3>
+                        <p class="specialization">{{ stylist.specialization }}</p>
+                        <p class="experience">{{ stylist.experience }} Experience</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4 scroll-animate">
+            <a href="{{ url_for('team') }}" class="btn btn-gold">Meet Our Full Team</a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="section testimonials-section">
+    <div class="container">
+        <div class="section-title scroll-animate">
+            <h2>What Our Clients Say</h2>
+            <p>Real reviews from our satisfied customers</p>
+        </div>
+        <div class="testimonial-carousel">
+            <button class="testimonial-carousel-btn prev" onclick="moveCarousel(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="testimonial-track" id="testimonialTrack">
+                <div class="testimonial-slide">
+                    <div class="row">
+                        {% for testimonial in testimonials %}
+                        <div class="col-lg-4 col-md-6 mb-4 scroll-animate-scale">
+                            <div class="testimonial-card">
+                                <div class="testimonial-header">
+                                    <img src="{{ testimonial.customer_image }}" alt="{{ testimonial.customer_name }}">
+                                    <div>
+                                        <h4>{{ testimonial.customer_name }}</h4>
+                                        <div class="testimonial-stars">
+                                            {% for i in range(testimonial.rating) %}
+                                            <i class="fas fa-star"></i>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="testimonial-text">"{{ testimonial.review }}"</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <button class="testimonial-carousel-btn next" onclick="moveCarousel(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+        <div class="testimonial-carousel-dots" id="carouselDots">
+            <div class="testimonial-dot active"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="section contact-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Contact Us</h2>
+            <p>Get in touch with us for appointments and inquiries</p>
+        </div>
+        <div class="contact-info">
+            <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <h4>Phone</h4>
+                <p>{{ site_settings.phone if site_settings else '+91 98765 43210' }}</p>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <h4>Email</h4>
+                <p>{{ site_settings.email if site_settings else 'info@ashabeautysalon.com' }}</p>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <h4>Address</h4>
+                <p>{{ site_settings.address if site_settings else '123 Beauty Street, Fashion District' }}</p>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-clock"></i>
+                <h4>Opening Hours</h4>
+                <p>{{ site_settings.business_hours if site_settings else 'Mon-Sat: 9AM - 8PM' }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="contact-item" style="text-align: left;">
+                    <h4 style="margin-bottom: 1rem;">WhatsApp Us</h4>
+                    {% if site_settings and site_settings.whatsapp_number %}
+                    <a href="https://wa.me/{{ site_settings.whatsapp_number }}" class="btn btn-gold" style="display: inline-flex; align-items: center; gap: 10px;">
+                        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                    </a>
+                    {% else %}
+                    <a href="https://wa.me/919876543210" class="btn btn-gold" style="display: inline-flex; align-items: center; gap: 10px;">
+                        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div style="border-radius: 20px; overflow: hidden; box-shadow: var(--shadow);">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.0!2d77.2!3d28.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjjCsDM2JzAwLjAiTiA3N8KwMTInMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890"
+                        width="100%" 
+                        height="250" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

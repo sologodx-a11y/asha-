@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - {{ site_settings.site_name if site_settings else 'ASHA Beauty Salon' }}{% endblock %}
+
+{% block content %}
+<section class="section booking-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>{{ title }}</h2>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-3 mb-4">
+                <div class="admin-sidebar">
+                    <h4 style="margin-bottom: 1.5rem; color: var(--text-dark);">Admin Menu</h4>
+                    <nav class="nav flex-column">
+                        <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_appointments') }}">
+                            <i class="fas fa-calendar-check me-2"></i>Appointments
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_services') }}">
+                            <i class="fas fa-cut me-2"></i>Services
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_gallery') }}">
+                            <i class="fas fa-images me-2"></i>Gallery
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_stylists') }}">
+                            <i class="fas fa-users me-2"></i>Stylists
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_testimonials') }}">
+                            <i class="fas fa-star me-2"></i>Testimonials
+                        </a>
+                        <a class="nav-link" href="{{ url_for('edit_about') }}">
+                            <i class="fas fa-info-circle me-2"></i>About Section
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_before_after') }}">
+                            <i class="fas fa-exchange-alt me-2"></i>Before/After
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_promotions') }}">
+                            <i class="fas fa-percentage me-2"></i>Promotions
+                        </a>
+                        <a class="nav-link active" href="{{ url_for('edit_site_settings') }}">
+                            <i class="fas fa-cog me-2"></i>Site Settings
+                        </a>
+                        <a class="nav-link" href="{{ url_for('home') }}">
+                            <i class="fas fa-home me-2"></i>Back to Website
+                        </a>
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </nav>
+                </div>
+            </div>
+            
+            <div class="col-lg-9">
+                <div class="booking-form">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.site_name.label }}</label>
+                            {{ form.site_name(class="form-control") }}
+                            {% if form.site_name.errors %}
+                            <div class="text-danger">
+                                {% for error in form.site_name.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Add Logo (Choose one option)</label>
+                            <div class="alert alert-info" style="background: #3D3D3D; border-color: var(--gold);">
+                                <small>You can either upload a logo file or paste a logo URL. This will update the logo and name across all pages.</small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Upload Logo File</label>
+                                {{ form.logo_file(class="form-control") }}
+                                {% if form.logo_file.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.logo_file.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Or Paste Logo URL</label>
+                                {{ form.logo_url(class="form-control", placeholder="https://example.com/logo.png") }}
+                                {% if form.logo_url.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.logo_url.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Background Image (Optional)</label>
+                            <div class="alert alert-info" style="background: #3D3D3D; border-color: var(--gold);">
+                                <small>Upload a background image for the website. If not set, default gradient will be used.</small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Upload Background Image File</label>
+                                {{ form.background_file(class="form-control") }}
+                                {% if form.background_file.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.background_file.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Or Paste Background Image URL</label>
+                                {{ form.background_url(class="form-control", placeholder="https://example.com/background.jpg") }}
+                                {% if form.background_url.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.background_url.errors %}
+                                    <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <hr style="border-color: var(--gold); margin: 2rem 0;">
+
+                        <h4 style="margin-bottom: 1.5rem; color: var(--text-dark);">Contact Information</h4>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.phone.label }}</label>
+                            {{ form.phone(class="form-control", placeholder="+91 98765 43210") }}
+                            {% if form.phone.errors %}
+                            <div class="text-danger">
+                                {% for error in form.phone.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.email.label }}</label>
+                            {{ form.email(class="form-control", placeholder="info@ashabeautysalon.com") }}
+                            {% if form.email.errors %}
+                            <div class="text-danger">
+                                {% for error in form.email.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.address.label }}</label>
+                            {{ form.address(class="form-control", placeholder="123 Beauty Street, Fashion District", rows="3") }}
+                            {% if form.address.errors %}
+                            <div class="text-danger">
+                                {% for error in form.address.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.whatsapp_number.label }}</label>
+                            {{ form.whatsapp_number(class="form-control", placeholder="919876543210") }}
+                            <small class="text-muted">For WhatsApp button (without + or spaces)</small>
+                            {% if form.whatsapp_number.errors %}
+                            <div class="text-danger">
+                                {% for error in form.whatsapp_number.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.business_hours.label }}</label>
+                            {{ form.business_hours(class="form-control", placeholder="Mon-Sat: 9AM - 8PM") }}
+                            {% if form.business_hours.errors %}
+                            <div class="text-danger">
+                                {% for error in form.business_hours.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <hr style="border-color: var(--gold); margin: 2rem 0;">
+                        
+                        <h4 style="margin-bottom: 1.5rem; color: var(--text-dark);">Social Media Links</h4>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.facebook_url.label }}</label>
+                            {{ form.facebook_url(class="form-control", placeholder="https://facebook.com/yourpage") }}
+                            {% if form.facebook_url.errors %}
+                            <div class="text-danger">
+                                {% for error in form.facebook_url.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.instagram_url.label }}</label>
+                            {{ form.instagram_url(class="form-control", placeholder="https://instagram.com/yourpage") }}
+                            {% if form.instagram_url.errors %}
+                            <div class="text-danger">
+                                {% for error in form.instagram_url.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.twitter_url.label }}</label>
+                            {{ form.twitter_url(class="form-control", placeholder="https://twitter.com/yourpage") }}
+                            {% if form.twitter_url.errors %}
+                            <div class="text-danger">
+                                {% for error in form.twitter_url.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.pinterest_url.label }}</label>
+                            {{ form.pinterest_url(class="form-control", placeholder="https://pinterest.com/yourpage") }}
+                            {% if form.pinterest_url.errors %}
+                            <div class="text-danger">
+                                {% for error in form.pinterest_url.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-gold w-100">Save Settings</button>
+                        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-gold w-100 mt-2">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

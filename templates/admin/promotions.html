@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Promotions - {{ site_settings.site_name if site_settings else 'ASHA Beauty Salon' }}{% endblock %}
+
+{% block content %}
+<section class="section booking-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Manage Promotions</h2>
+            <p>Create and manage seasonal promotions and special offers</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-3 mb-4">
+                <div class="admin-sidebar">
+                    <h4 style="margin-bottom: 1.5rem; color: var(--text-dark);">Admin Menu</h4>
+                    <nav class="nav flex-column">
+                        <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_appointments') }}">
+                            <i class="fas fa-calendar-check me-2"></i>Appointments
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_services') }}">
+                            <i class="fas fa-cut me-2"></i>Services
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_gallery') }}">
+                            <i class="fas fa-images me-2"></i>Gallery
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_stylists') }}">
+                            <i class="fas fa-users me-2"></i>Stylists
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_testimonials') }}">
+                            <i class="fas fa-star me-2"></i>Testimonials
+                        </a>
+                        <a class="nav-link" href="{{ url_for('edit_about') }}">
+                            <i class="fas fa-info-circle me-2"></i>About Section
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin_before_after') }}">
+                            <i class="fas fa-exchange-alt me-2"></i>Before/After
+                        </a>
+                        <a class="nav-link active" href="{{ url_for('admin_promotions') }}">
+                            <i class="fas fa-percentage me-2"></i>Promotions
+                        </a>
+                        <a class="nav-link" href="{{ url_for('edit_site_settings') }}">
+                            <i class="fas fa-cog me-2"></i>Site Settings
+                        </a>
+                        <a class="nav-link" href="{{ url_for('home') }}">
+                            <i class="fas fa-home me-2"></i>Back to Website
+                        </a>
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </nav>
+                </div>
+            </div>
+            
+            <div class="col-lg-9">
+                <div class="admin-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3 style="color: var(--text-dark); margin: 0;">All Promotions</h3>
+                        <a href="{{ url_for('add_promotion') }}" class="btn btn-gold">
+                            <i class="fas fa-plus me-2"></i>Add New Promotion
+                        </a>
+                    </div>
+                    
+                    {% if promotions %}
+                    <div class="row">
+                        {% for promo in promotions %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                {% if promo.image_url %}
+                                <img src="{{ promo.image_url }}" alt="{{ promo.title }}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px 10px 0 0;">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5>{{ promo.title }}</h5>
+                                    {% if promo.discount_percentage %}
+                                    <span class="badge bg-success">{{ promo.discount_percentage }}% OFF</span>
+                                    {% endif %}
+                                    {% if promo.is_active %}
+                                    <span class="badge bg-primary">Active</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">Inactive</span>
+                                    {% endif %}
+                                    <p class="text-muted small mt-2">{{ promo.description[:80] }}...</p>
+                                    {% if promo.valid_from and promo.valid_until %}
+                                    <small class="text-muted">Valid: {{ promo.valid_from }} to {{ promo.valid_until }}</small>
+                                    {% endif %}
+                                    <div class="mt-3">
+                                        <a href="{{ url_for('edit_promotion', promo_id=promo.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                        <a href="{{ url_for('delete_promotion', promo_id=promo.id) }}" class="btn btn-sm btn-danger">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No promotions found. Add your first promotion to get started.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
