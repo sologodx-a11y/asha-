@@ -17,8 +17,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 init_routes(app)
 
+# Create database tables on startup
+with app.app_context():
+    db.create_all()
+
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     # For production, set debug=False and use a production WSGI server like gunicorn
     app.run(debug=False, host='0.0.0.0', port=5000)
