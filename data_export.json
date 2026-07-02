@@ -1,0 +1,26 @@
+{
+  "users": [],
+  "services": [],
+  "stylists": [],
+  "gallery": [],
+  "testimonials": [],
+  "about": null,
+  "site_settings": {
+    "id": 1,
+    "site_name": "ASHA Beauty Salon",
+    "logo_url": "https://via.placeholder.com/150x50?text=ASHA",
+    "phone": "+91 98765 43210",
+    "email": "info@ashabeautysalon.com",
+    "address": "123 Beauty Street, Fashion District",
+    "whatsapp_number": "919876543210",
+    "business_hours": "Mon-Sat: 9AM - 8PM",
+    "facebook_url": null,
+    "instagram_url": null,
+    "twitter_url": null,
+    "pinterest_url": null,
+    "updated_at": "2026-06-28 15:07:07",
+    "background_image": null
+  },
+  "before_after": [],
+  "promotions": []
+}

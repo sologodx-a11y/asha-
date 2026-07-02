@@ -1076,3 +1076,165 @@ def init_routes(app):
         
         db.session.commit()
         return "Database initialized successfully! <a href='/'>Go to Home</a>"
+    
+    @app.route('/import-data', methods=['GET', 'POST'])
+    def import_data():
+        """Import data from JSON file"""
+        import json
+        from werkzeug.security import generate_password_hash
+        
+        if request.method == 'POST':
+            if 'file' not in request.files:
+                return "No file uploaded"
+            
+            file = request.files['file']
+            if file.filename == '':
+                return "No file selected"
+            
+            if file and file.filename.endswith('.json'):
+                try:
+                    data = json.load(file)
+                    
+                    # Import Users
+                    for user_data in data.get('users', []):
+                        if not User.query.filter_by(username=user_data['username']).first():
+                            user = User(
+                                username=user_data['username'],
+                                password=user_data['password'],
+                                email=user_data['email'],
+                                is_admin=user_data['is_admin']
+                            )
+                            db.session.add(user)
+                    
+                    # Import Services
+                    for service_data in data.get('services', []):
+                        if not Service.query.filter_by(name=service_data['name']).first():
+                            service = Service(
+                                name=service_data['name'],
+                                description=service_data['description'],
+                                price=service_data['price'],
+                                duration=service_data['duration'],
+                                image=service_data['image'],
+                                category=service_data['category'],
+                                featured=service_data['featured']
+                            )
+                            db.session.add(service)
+                    
+                    # Import Stylists
+                    for stylist_data in data.get('stylists', []):
+                        if not Stylist.query.filter_by(name=stylist_data['name']).first():
+                            stylist = Stylist(
+                                name=stylist_data['name'],
+                                specialization=stylist_data['specialization'],
+                                experience=stylist_data['experience'],
+                                image=stylist_data['image'],
+                                bio=stylist_data.get('bio')
+                            )
+                            db.session.add(stylist)
+                    
+                    # Import Gallery
+                    for gallery_data in data.get('gallery', []):
+                        if not Gallery.query.filter_by(title=gallery_data['title']).first():
+                            gallery = Gallery(
+                                title=gallery_data['title'],
+                                image=gallery_data['image'],
+                                category=gallery_data['category'],
+                                description=gallery_data.get('description')
+                            )
+                            db.session.add(gallery)
+                    
+                    # Import Testimonials
+                    for testimonial_data in data.get('testimonials', []):
+                        if not Testimonial.query.filter_by(customer_name=testimonial_data['customer_name']).first():
+                            testimonial = Testimonial(
+                                customer_name=testimonial_data['customer_name'],
+                                customer_image=testimonial_data['customer_image'],
+                                review=testimonial_data['review'],
+                                rating=testimonial_data['rating']
+                            )
+                            db.session.add(testimonial)
+                    
+                    # Import About
+                    about_data = data.get('about')
+                    if about_data and not About.query.first():
+                        about = About(
+                            title=about_data['title'],
+                            description=about_data['description'],
+                            image=about_data['image'],
+                            video_url=about_data.get('video_url'),
+                            use_video=about_data.get('use_video', False),
+                            years_experience=about_data['years_experience'],
+                            happy_clients=about_data['happy_clients'],
+                            expert_stylists=about_data['expert_stylists']
+                        )
+                        db.session.add(about)
+                    
+                    # Import SiteSettings
+                    settings_data = data.get('site_settings')
+                    if settings_data and not SiteSettings.query.first():
+                        settings = SiteSettings(
+                            site_name=settings_data['site_name'],
+                            logo_url=settings_data['logo_url'],
+                            background_image=settings_data.get('background_image'),
+                            phone=settings_data['phone'],
+                            email=settings_data['email'],
+                            address=settings_data['address'],
+                            whatsapp_number=settings_data['whatsapp_number'],
+                            business_hours=settings_data['business_hours'],
+                            facebook_url=settings_data.get('facebook_url'),
+                            instagram_url=settings_data.get('instagram_url'),
+                            twitter_url=settings_data.get('twitter_url'),
+                            pinterest_url=settings_data.get('pinterest_url')
+                        )
+                        db.session.add(settings)
+                    
+                    # Import BeforeAfter
+                    for ba_data in data.get('before_after', []):
+                        if not BeforeAfter.query.filter_by(title=ba_data['title']).first():
+                            before_after = BeforeAfter(
+                                title=ba_data['title'],
+                                before_image=ba_data['before_image'],
+                                after_image=ba_data['after_image'],
+                                service_type=ba_data['service_type'],
+                                description=ba_data.get('description'),
+                                featured=ba_data['featured']
+                            )
+                            db.session.add(before_after)
+                    
+                    # Import Promotions
+                    for promo_data in data.get('promotions', []):
+                        if not Promotion.query.filter_by(title=promo_data['title']).first():
+                            promotion = Promotion(
+                                title=promo_data['title'],
+                                description=promo_data['description'],
+                                image_url=promo_data.get('image_url'),
+                                discount_percentage=promo_data.get('discount_percentage'),
+                                valid_from=promo_data.get('valid_from'),
+                                valid_until=promo_data.get('valid_until'),
+                                is_active=promo_data['is_active']
+                            )
+                            db.session.add(promotion)
+                    
+                    db.session.commit()
+                    return "Data imported successfully! <a href='/'>Go to Home</a>"
+                except Exception as e:
+                    return f"Error importing data: {str(e)}"
+            else:
+                return "Please upload a JSON file"
+        
+        return '''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Import Data</title>
+        </head>
+        <body>
+            <h1>Import Data from JSON</h1>
+            <form method="POST" enctype="multipart/form-data">
+                <input type="file" name="file" accept=".json" required>
+                <button type="submit">Import</button>
+            </form>
+            <p><a href="/">Back to Home</a></p>
+        </body>
+        </html>
+        '''
