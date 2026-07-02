@@ -9,9 +9,11 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-
 # Use PostgreSQL in production, SQLite in development
 database_url = os.environ.get('DATABASE_URL', 'postgresql://admin:k5uVhCsXflGzxm0APNRX96p7FuXhMvyt@dpg-d92u8h9kh4rs7393uofg-a.singapore-postgres.render.com/salon_gqpw')
 if database_url:
-    # Fix PostgreSQL URL for SQLAlchemy
+    # Fix PostgreSQL URL for SQLAlchemy and use psycopg3 driver
     if database_url.startswith('postgres://'):
-        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+        database_url = database_url.replace('postgres://', 'postgresql+psycopg://', 1)
+    elif database_url.startswith('postgresql://'):
+        database_url = database_url.replace('postgresql://', 'postgresql+psycopg://', 1)
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url or 'sqlite:///salon.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
