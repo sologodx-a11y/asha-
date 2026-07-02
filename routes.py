@@ -1374,3 +1374,24 @@ def init_routes(app):
             mimetype='application/json',
             headers={'Content-Disposition': 'attachment; filename=data_export.json'}
         )
+    
+    @app.route('/clear-db')
+    def clear_database():
+        """Clear all data from database"""
+        try:
+            # Delete all data in reverse order of dependencies
+            Appointment.query.delete()
+            BeforeAfter.query.delete()
+            Promotion.query.delete()
+            Gallery.query.delete()
+            Testimonial.query.delete()
+            Stylist.query.delete()
+            Service.query.delete()
+            About.query.delete()
+            SiteSettings.query.delete()
+            User.query.delete()
+            db.session.commit()
+            return "Database cleared successfully! <a href='/import-data'>Go to Import Data</a>"
+        except Exception as e:
+            db.session.rollback()
+            return f"Error clearing database: {str(e)}"
