@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
 
 # Use PostgreSQL in production, SQLite in development
-database_url = os.environ.get('DATABASE_URL')
+database_url = os.environ.get('DATABASE_URL', 'postgresql://admin:k5uVhCsXflGzxm0APNRX96p7FuXhMvyt@dpg-d92u8h9kh4rs7393uofg-a.singapore-postgres.render.com/salon_gqpw')
 if database_url:
     # Fix PostgreSQL URL for SQLAlchemy
     if database_url.startswith('postgres://'):
@@ -30,4 +30,4 @@ with app.app_context():
 
 if __name__ == '__main__':
     # For production, set debug=False and use a production WSGI server like gunicorn
-    app.run(debug=False, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
