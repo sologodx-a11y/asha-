@@ -1238,3 +1238,139 @@ def init_routes(app):
         </body>
         </html>
         '''
+    
+    @app.route('/export-data')
+    def export_data():
+        """Export data to JSON file"""
+        import json
+        from flask import Response
+        
+        data = {
+            'users': [],
+            'services': [],
+            'stylists': [],
+            'gallery': [],
+            'testimonials': [],
+            'about': None,
+            'site_settings': None,
+            'before_after': [],
+            'promotions': []
+        }
+        
+        # Export Users
+        users = User.query.all()
+        for user in users:
+            data['users'].append({
+                'username': user.username,
+                'password': user.password,
+                'email': user.email,
+                'is_admin': user.is_admin
+            })
+        
+        # Export Services
+        services = Service.query.all()
+        for service in services:
+            data['services'].append({
+                'name': service.name,
+                'description': service.description,
+                'price': service.price,
+                'duration': service.duration,
+                'image': service.image,
+                'category': service.category,
+                'featured': service.featured
+            })
+        
+        # Export Stylists
+        stylists = Stylist.query.all()
+        for stylist in stylists:
+            data['stylists'].append({
+                'name': stylist.name,
+                'specialization': stylist.specialization,
+                'experience': stylist.experience,
+                'image': stylist.image,
+                'bio': stylist.bio
+            })
+        
+        # Export Gallery
+        gallery = Gallery.query.all()
+        for item in gallery:
+            data['gallery'].append({
+                'title': item.title,
+                'image': item.image,
+                'category': item.category,
+                'description': item.description
+            })
+        
+        # Export Testimonials
+        testimonials = Testimonial.query.all()
+        for testimonial in testimonials:
+            data['testimonials'].append({
+                'customer_name': testimonial.customer_name,
+                'customer_image': testimonial.customer_image,
+                'review': testimonial.review,
+                'rating': testimonial.rating
+            })
+        
+        # Export About
+        about = About.query.first()
+        if about:
+            data['about'] = {
+                'title': about.title,
+                'description': about.description,
+                'image': about.image,
+                'video_url': about.video_url,
+                'use_video': about.use_video,
+                'years_experience': about.years_experience,
+                'happy_clients': about.happy_clients,
+                'expert_stylists': about.expert_stylists
+            }
+        
+        # Export SiteSettings
+        settings = SiteSettings.query.first()
+        if settings:
+            data['site_settings'] = {
+                'site_name': settings.site_name,
+                'logo_url': settings.logo_url,
+                'background_image': settings.background_image,
+                'phone': settings.phone,
+                'email': settings.email,
+                'address': settings.address,
+                'whatsapp_number': settings.whatsapp_number,
+                'business_hours': settings.business_hours,
+                'facebook_url': settings.facebook_url,
+                'instagram_url': settings.instagram_url,
+                'twitter_url': settings.twitter_url,
+                'pinterest_url': settings.pinterest_url
+            }
+        
+        # Export BeforeAfter
+        before_after = BeforeAfter.query.all()
+        for ba in before_after:
+            data['before_after'].append({
+                'title': ba.title,
+                'before_image': ba.before_image,
+                'after_image': ba.after_image,
+                'service_type': ba.service_type,
+                'description': ba.description,
+                'featured': ba.featured
+            })
+        
+        # Export Promotions
+        promotions = Promotion.query.all()
+        for promo in promotions:
+            data['promotions'].append({
+                'title': promo.title,
+                'description': promo.description,
+                'image_url': promo.image_url,
+                'discount_percentage': promo.discount_percentage,
+                'valid_from': str(promo.valid_from) if promo.valid_from else None,
+                'valid_until': str(promo.valid_until) if promo.valid_until else None,
+                'is_active': promo.is_active
+            })
+        
+        json_str = json.dumps(data, indent=2, default=str)
+        return Response(
+            json_str,
+            mimetype='application/json',
+            headers={'Content-Disposition': 'attachment; filename=data_export.json'}
+        )
