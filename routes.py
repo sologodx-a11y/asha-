@@ -1395,3 +1395,27 @@ def init_routes(app):
         except Exception as e:
             db.session.rollback()
             return f"Error clearing database: {str(e)}"
+    
+    @app.route('/create-admin')
+    def create_admin():
+        """Create admin user with known credentials"""
+        try:
+            # Delete existing admin if exists
+            existing_admin = User.query.filter_by(username='admin').first()
+            if existing_admin:
+                db.session.delete(existing_admin)
+                db.session.commit()
+            
+            # Create new admin
+            admin = User(
+                username='admin',
+                password=generate_password_hash('admin123'),
+                email='admin@ashabeautysalon.com',
+                is_admin=True
+            )
+            db.session.add(admin)
+            db.session.commit()
+            return "Admin user created successfully! Username: admin, Password: admin123 <a href='/login'>Go to Login</a>"
+        except Exception as e:
+            db.session.rollback()
+            return f"Error creating admin: {str(e)}"
